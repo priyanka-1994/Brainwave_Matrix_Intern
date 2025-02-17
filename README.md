@@ -1,3 +1,7 @@
+Complete CI-CD pipeline Documentation:
+https://medium.com/p/a8d164dbd5
+
+
 # django-todo
 A simple todo app built with django
 
