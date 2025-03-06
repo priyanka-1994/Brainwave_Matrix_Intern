@@ -50,5 +50,11 @@ jobs:
         run: |
           aws eks update-kubeconfig --name my-cluster --region us-east-1
           echo "Updating the Kubernetes deployment with the new image..."
-          kubectl set image deployment/my-app-deployment my-app=${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+          if kubectl get deployment/my-app-deployment > /dev/null 2>&1; then
+            echo "Deployment exists, updating the image..."
+            kubectl set image deployment/my-app-deployment my-app=${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+          else
+            echo "Deployment not found, applying deployment manifest."
+            kubectl apply -f deployment.yaml
+          fi 
           echo "Deployment updated."
