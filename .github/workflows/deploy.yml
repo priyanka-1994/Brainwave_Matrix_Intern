@@ -1,0 +1,56 @@
+name: Deploy to EKS
+
+on:
+  push:
+    branches:
+      - develop  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Step 2: Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Step 3: Login to Amazon ECR
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 585768147309.dkr.ecr.us-east-1.amazonaws.com
+
+      # Step 4: Build, tag, and push Docker image to ECR
+      - name: Build, Tag, and Push Docker Image
+        env:
+          ECR_REGISTRY: 585768147309.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REPOSITORY: my-app
+          IMAGE_TAG: ${{ github.sha }}   # Using the commit SHA for a unique image tag
+        run: |
+          echo "Building the Docker image..."
+          docker build -t my-app:${IMAGE_TAG} .
+          echo "Tagging the Docker image..."
+          docker tag my-app:${IMAGE_TAG} ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+          echo "Pushing the Docker image to ECR..."
+          docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+
+      # Step 5: Update the Kubernetes Deployment in EKS
+      - name: Update Kubernetes Deployment
+        env:
+          ECR_REGISTRY: 585768147309.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REPOSITORY: my-app
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # Ensure that your kubeconfig is configured properly.
+          # If needed, you can update kubeconfig with:
+          # aws eks update-kubeconfig --name my-cluster --region us-east-1
+          echo "Updating the Kubernetes deployment with the new image..."
+          kubectl set image deployment/my-app-deployment my-app=${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+          echo "Deployment updated."
