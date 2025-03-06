@@ -50,7 +50,7 @@ jobs:
         run: |
           # Ensure that your kubeconfig is configured properly.
           # If needed, you can update kubeconfig with:
-          # aws eks update-kubeconfig --name my-cluster --region us-east-1
+          aws eks update-kubeconfig --name my-cluster --region us-east-1
           echo "Updating the Kubernetes deployment with the new image..."
           kubectl set image deployment/my-app-deployment my-app=${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
           echo "Deployment updated."
