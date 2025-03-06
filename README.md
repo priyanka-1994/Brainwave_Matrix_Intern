@@ -1,42 +1,39 @@
-Complete CI-CD pipeline Documentation:
-https://medium.com/p/a8d164dbd5
+Cloud Computing Internship Project Documentation
 
+1. Overview
+This project demonstrates a cloud deployment pipeline for a Django-based To-Do application. The pipeline automates the process from code commit to production deployment using Amazon ECR, Amazon EKS, and GitHub Actions. It highlights cloud computing practices including containerization, orchestration, and continuous integration/continuous deployment (CI/CD).
 
-# django-todo
-A simple todo app built with django
+2. Prerequisites
 
-![todo App](https://raw.githubusercontent.com/shreys7/django-todo/develop/staticfiles/todoApp.png)
-### Setup
-To get this repository, run the following command inside your git enabled terminal
-```bash
-$ git clone https://github.com/shreys7/django-todo.git
-```
-You will need django to be installed in you computer to run this app. Head over to https://www.djangoproject.com/download/ for the download guide
+•	Amazon ECR Repository Name: my-app
 
-Once you have downloaded django, go to the cloned repo directory and run the following command
+•	Amazon EKS Cluster Name: my-cluster
 
-```bash
-$ python manage.py makemigrations
-```
+•	Repository URL: https://github.com/priyanka-1994/Brainwave_Matrix_Intern.git
 
-This will create all the migrations file (database migrations) required to run this App.
+•	Branch: Use the develop branch.
 
-Now, to apply this migrations run the following command
-```bash
-$ python manage.py migrate
-```
+3. CI/CD Pipeline with GitHub Actions
 
-One last step and then our todo App will be live. We need to create an admin user to run this App. On the terminal, type the following command and provide username, password and email for the admin user
-```bash
-$ python manage.py createsuperuser
-```
+  1.	Checkout Code
+   
+  2.	The workflow checks out the latest code from the repository.
+   
+  3.	Configure AWS Credentials
+   
+  4.	Login to ECR
 
-That was pretty simple, right? Now let's make the App live. We just need to start the server now and then we can start using our simple todo App. Start the server by following command
+  5.	Build, Tag, and Push Docker Image:
 
-```bash
-$ python manage.py runserver
-```
+  6.	Update or Create Kubernetes Deployment:
+ 
+4. Conclusion
+   This project successfully automates the entire deployment pipeline:
 
-Once the server is hosted, head over to http://127.0.0.1:8000/todos for the App.
+	   1. Containerization: The Django application is containerized using Docker.
 
-Cheers and Happy Coding :)
+     2.	Image Management: The Docker image is pushed to a private ECR repository.
+
+     3. Orchestration: The application is deployed on an EKS cluster using Kubernetes.
+
+    4. Automation: GitHub Actions provides a CI/CD pipeline that integrates all these steps for updates.
