@@ -58,3 +58,5 @@ jobs:
             kubectl apply -f deployment.yaml
           fi 
           echo "Deployment updated."
+      - name: Show Service Details
+        run: kubectl get svc my-app-service -o wide 
