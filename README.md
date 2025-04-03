@@ -1,6 +1,4 @@
 # Getting Started with Create Chat App
-You can access from here 
-https://brainwave-matrix-sol-project.web.app
 
 ## Available Scripts
 
